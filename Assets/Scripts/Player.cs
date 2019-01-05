@@ -1,0 +1,108 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class Player : MonoBehaviour
+	{
+		
+
+        public int maxLife = 3;
+        public int currentLife;
+        private UIManager uiManager;
+        public float minSpeed = 10f;
+        public float maxSpeed = 15f;
+        public float invicibleTime;
+        public GameObject model;           
+        private bool invencible = false;
+         Animator m_Animator;
+
+        public Vector3 teleportPoint;
+        public Rigidbody rb;
+        float m_Speed;
+    public bool stopRun = false;     
+   
+        void Start()
+        {
+            m_Animator = GetComponent<Animator>();
+
+            currentLife = maxLife;
+            uiManager = FindObjectOfType<UIManager>();
+            rb = GetComponent<Rigidbody>();
+            m_Speed = 5.0f;
+        }
+
+         void FixedUpdate()
+        {
+        if (!stopRun)
+        {
+            rb.velocity = transform.forward * m_Speed;
+            rb.MovePosition(transform.position + transform.forward * Time.deltaTime);
+        }
+
+        }
+
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (invencible)
+            {
+                return;
+            }
+            if (other.CompareTag("Obstacle"))
+            {
+            rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
+
+            currentLife--;
+            uiManager.UpdateLives(currentLife);
+            m_Speed = 0;
+            stopRun = true;
+            if (currentLife == 0)
+                {
+                m_Speed = 0;
+                m_Animator.SetBool("Crouch", true);
+                uiManager.gameOverPanel.SetActive(true);
+                //Invoke("CallMenu", 2f);
+            }
+                else
+                {
+                    StartCoroutine(Blinking(invicibleTime));
+                }
+            }
+        }
+
+        IEnumerator Blinking(float time)
+        {
+            invencible = true;
+            float timer = 0;
+            float currentBlik = 1f;
+            float lastBliking = 0;
+            float blinkPeriod = 0.1f;
+            bool enabled = false;
+            yield return new WaitForSeconds(1f);
+        m_Speed = minSpeed;
+        stopRun = false;
+            while(timer < time  && invencible) {
+                model.SetActive(enabled);
+                yield return null;
+                timer += Time.deltaTime;
+                lastBliking += Time.deltaTime;
+                if(blinkPeriod < lastBliking)
+                {
+                    lastBliking = 0;
+                    currentBlik = 1f - currentBlik;
+                    enabled = !enabled;
+
+                }
+            }
+            model.SetActive(true);
+            invencible = false;
+
+        }
+        void CallMenu()
+    {
+        //GameManeger.gm.EndRun();
+    }
+
+}   
+
+
