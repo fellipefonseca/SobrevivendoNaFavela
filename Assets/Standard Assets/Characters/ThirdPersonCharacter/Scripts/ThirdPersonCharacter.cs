@@ -23,7 +23,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public int maxLife = 3;
         public int currentLife;
 
-        public float speed = 20f;
+        public float speed = 10f;
         public float minSpeed = 10f;
         public float maxSpeed = 15f;
         public float invicibleTime = 1;
@@ -51,7 +51,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_CapsuleHeight = m_Capsule.height;
 			m_CapsuleCenter = m_Capsule.center;
             rb = GetComponent<Rigidbody>();
-            m_Speed = 15.0f;
+            m_Speed = 5.0f;
             m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
             currentLife = maxLife;
@@ -237,7 +237,59 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			}
 		}
 
-       
+        private void OnTriggerEnter(Collider other)
+        {
+            if (invencible)
+            {
+                Debug.Log("INVENCIVEL");
+                return;
+            }
+            if (other.CompareTag("Obstacle"))
+            {
+                Debug.Log("COLIDIU");
+
+                currentLife--;
+                speed = 0;
+                if (currentLife == 0)
+                {
+                    Debug.Log("GAME OVER");
+
+                    //Game over
+                }
+                else
+                {
+                    StartCoroutine(Blinking(invicibleTime));
+                }
+            }
+        }
+
+        IEnumerator Blinking(float time)
+        {
+            invencible = true;
+            float timer = 0;
+            float currentBlik = 1f;
+            float lastBliking = 0;
+            float blinkPeriod = 0.1f;
+            bool enabled = false;
+            yield return new WaitForSeconds(1f);
+            speed = minSpeed;
+            while(timer < time  && invencible) {
+                model.SetActive(enabled);
+                yield return null;
+                timer += Time.deltaTime;
+                lastBliking += Time.deltaTime;
+                if(blinkPeriod < lastBliking)
+                {
+                    lastBliking = 0;
+                    currentBlik = 1f - currentBlik;
+                    enabled = !enabled;
+
+                }
+            }
+            model.SetActive(true);
+            invencible = false;
+
+        }
     }
    
 
