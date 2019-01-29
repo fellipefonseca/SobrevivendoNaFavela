@@ -43,26 +43,27 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                ChangeLane(-2);
+                ChangeLane(-1);
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                ChangeLane(2);
+                ChangeLane(1);
             }
-            float x = verticalTargetPosition.x + 143;
-            float z = transform.position.y + 20;
-            Vector3 targetPosition = new Vector3(x, verticalTargetPosition.y, transform.position.z);
-            transform.position = Vector3.MoveTowards(transform.position, targetPosition, laneSpeed * Time.deltaTime);
 
+            Vector3 targetPosition = new Vector3(verticalTargetPosition.x, verticalTargetPosition.y, transform.position.z);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, laneSpeed * Time.deltaTime);
 
         }
 
         void ChangeLane(int direction)
         {
             int targetLane = currentLane + direction;
+
+            if (targetLane < 0 || targetLane > 2)
+                return;
+
             currentLane = targetLane;
-            float x  = Convert.ToSingle(currentLane - 1);
-            verticalTargetPosition = new Vector3(x, 0, 0);
+            verticalTargetPosition = new Vector3((currentLane - 1), 0, 0);
         }
         // Fixed update is called in sync with physics
         private void FixedUpdate()

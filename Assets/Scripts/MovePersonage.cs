@@ -11,7 +11,7 @@ public class movePersonage : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        m_Speed = 5.0f;
+        m_Speed = 50.0f;
     }
 
     void FixedUpdate()

@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
             currentLife = maxLife;
             uiManager = FindObjectOfType<UIManager>();
             rb = GetComponent<Rigidbody>();
-            m_Speed = 5.0f;
+            m_Speed = 155.0f;
         }
 
          void FixedUpdate()
@@ -39,30 +39,7 @@ public class Player : MonoBehaviour
       
 
         }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            ChangeLane(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            ChangeLane(1);
-        }
-
-        Vector3 targetPosition = new Vector3(verticalTargetPosition.x, verticalTargetPosition.y, transform.position.z);
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, laneSpeed * Time.deltaTime);
-
-    }
-
-    void ChangeLane(int direction)
-    {
-        int targetLane = currentLane + direction;
-        if (targetLane < 0 || targetLane > 2)
-            return;
-        currentLane = targetLane;
-        verticalTargetPosition = new Vector3((currentLane - 1), 0, 0);
-    }
+   
 
 
     private void OnTriggerEnter(Collider other)
@@ -73,17 +50,16 @@ public class Player : MonoBehaviour
             }
             if (other.CompareTag("Obstacle"))
             {
-            rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
+
+            //rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
 
             currentLife--;
             uiManager.UpdateLives(currentLife);
-            m_Speed = 0;
             if (currentLife == 0)
                 {
                 stopRun = true;
 
                 m_Speed = 0;
-                m_Animator.SetBool("Crouch", true);
                 uiManager.gameOverPanel.SetActive(true);
                 //Invoke("CallMenu", 2f);
             }
@@ -103,7 +79,7 @@ public class Player : MonoBehaviour
             float blinkPeriod = 0.1f;
             bool enabled = false;
             yield return new WaitForSeconds(1f);
-            m_Speed = minSpeed;
+            //m_Speed = minSpeed;
             stopRun = false;
             while(timer < time  && invencible) {
                 model.SetActive(enabled);
