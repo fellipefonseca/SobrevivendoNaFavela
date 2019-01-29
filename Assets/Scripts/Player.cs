@@ -78,9 +78,10 @@ public class Player : MonoBehaviour
             currentLife--;
             uiManager.UpdateLives(currentLife);
             m_Speed = 0;
-            stopRun = true;
             if (currentLife == 0)
                 {
+                stopRun = true;
+
                 m_Speed = 0;
                 m_Animator.SetBool("Crouch", true);
                 uiManager.gameOverPanel.SetActive(true);
@@ -102,8 +103,8 @@ public class Player : MonoBehaviour
             float blinkPeriod = 0.1f;
             bool enabled = false;
             yield return new WaitForSeconds(1f);
-        m_Speed = minSpeed;
-        stopRun = false;
+            m_Speed = minSpeed;
+            stopRun = false;
             while(timer < time  && invencible) {
                 model.SetActive(enabled);
                 yield return null;

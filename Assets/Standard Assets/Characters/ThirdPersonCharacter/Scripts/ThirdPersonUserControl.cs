@@ -1,6 +1,8 @@
 using System;
-using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -13,19 +15,27 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
+        public int maxLife = 3;
+        public int currentLife;
+        
+        private bool invencible = false;
         public float laneSpeed;
         private int currentLane = 1;
         private Vector3 verticalTargetPosition;
         public Vector3 teleportPoint;
         public Rigidbody rb;
         float m_Speed;
+
         public bool stopRun = false;
+
+        Animator m_Animator;
 
         private void Start()
         {
             rb = GetComponent<Rigidbody>();
             m_Speed = 5.0f;
- 
+            m_Animator = GetComponent<Animator>();
+            currentLife = maxLife;
         }
 
 
@@ -66,6 +76,28 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             // read inputs
          
         }
-       
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (invencible)
+            {
+                return;
+            }
+            if (other.CompareTag("Obstacle"))
+            {
+                // rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
+
+                currentLife--;
+                if (currentLife == 0)
+                {
+
+                    stopRun = true;
+                    m_Speed = 0;
+                    //Invoke("CallMenu", 2f);
+                }
+
+            }
+        }
+
     }
 }
