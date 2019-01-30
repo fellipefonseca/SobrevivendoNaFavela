@@ -39,7 +39,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void Start()
         {
             rb = GetComponent<Rigidbody>();
-            m_Speed = 5.0f;
+            m_Speed = 9.0f;
             m_Animator = GetComponent<Animator>();
             currentLife = maxLife;
         }
@@ -127,10 +127,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
                 //rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
 
+                stopRun = true;
                 currentLife--;
+
                 if (currentLife == 0)
                 {
-                    stopRun = true;
                     m_Speed = 0;
                     //Invoke("CallMenu", 2f);
                 }
@@ -152,6 +153,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             yield return new WaitForSeconds(1f);
             //m_Speed = minSpeed;
             stopRun = false;
+
             while (timer < time && invencible)
             {
                 yield return null;

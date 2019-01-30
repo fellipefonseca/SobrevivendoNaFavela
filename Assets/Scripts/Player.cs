@@ -22,8 +22,8 @@ public class Player : MonoBehaviour
         public Vector3 teleportPoint;
         public Rigidbody rb;
         float m_Speed;
-        public bool stopRun = false;     
-   
+        public bool stopRun = false;
+        public int coins;
         void Start()
         {
             m_Animator = GetComponent<Animator>();
@@ -43,19 +43,21 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
         {
-            if (invencible)
+        if (other.CompareTag("coin")){
+            coins++;
+            uiManager.UpdateCoins(coins);
+            other.transform.parent.gameObject.SetActive(false);
+        }
+        if (invencible)
             {
                 return;
             }
             if (other.CompareTag("Obstacle"))
             {
-            Debug.Log("COLIDIU");
 
             //rb.MovePosition(transform.position - transform.forward * (Time.deltaTime));
 
             currentLife--;
-            Debug.Log("COLIDIU" + currentLife);
-
             uiManager.UpdateLives(currentLife);
             if (currentLife == 0)
                 {

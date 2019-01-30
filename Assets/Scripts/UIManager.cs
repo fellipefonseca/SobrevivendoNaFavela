@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     public Image[] lifeHearts;
     public GameObject gameOverPanel;
+    public Text coinText;
     public void UpdateLives(int lives)
     {
         for (int i = 0; i < lifeHearts.Length; i++)
@@ -20,5 +21,10 @@ public class UIManager : MonoBehaviour
                 lifeHearts[i].color = Color.black;
             }
         }
+    }
+
+    public void UpdateCoins(int coin)
+    {
+        coinText.text = coin.ToString();
     }
 }
