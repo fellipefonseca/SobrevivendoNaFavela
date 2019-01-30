@@ -33,12 +33,9 @@ public class Track : MonoBehaviour
             float posZmax = ((167f / newObstacles.Count) + (167f / newObstacles.Count) * i + 1) - 30;
             newObstacles[i].transform.localPosition = new Vector3(124.62f, 73f, Random.Range(posZmin, posZmax));
             newObstacles[i].SetActive(true);
-            Debug.Log("QQQQ");
             if (newObstacles[i].GetComponent<ChangeLane>() != null)
             {
-                Debug.Log("QQQQaaa");
                 int randomLane = Random.Range(-2, 1);
-
                 newObstacles[i].transform.localPosition = new Vector3(127f + randomLane*2, 73f, Random.Range(posZmin, posZmax));
             }
         }
